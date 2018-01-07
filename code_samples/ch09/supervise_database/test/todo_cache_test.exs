@@ -1,5 +1,5 @@
 defmodule TodoCacheTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case
 
   test "mapping of list names to pids" do
     Todo.System.start_link()
@@ -10,7 +10,7 @@ defmodule TodoCacheTest do
     assert bob_pid == Todo.Cache.server_process("bob")
   end
 
-  test "to-do requests" do
+  test "to-do operations" do
     Todo.System.start_link()
 
     jane = Todo.Cache.server_process("jane")

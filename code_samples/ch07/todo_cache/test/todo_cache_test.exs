@@ -1,5 +1,5 @@
 defmodule TodoCacheTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   test "mapping of list names to pids" do
     {:ok, cache} = Todo.Cache.start()
@@ -8,19 +8,14 @@ defmodule TodoCacheTest do
 
     assert bob_pid != Todo.Cache.server_process(cache, "alice")
     assert bob_pid == Todo.Cache.server_process(cache, "bob")
-
-    GenServer.stop(cache)
   end
 
-  test "to-do requests" do
+  test "to-do operations" do
     {:ok, cache} = Todo.Cache.start()
 
     alice = Todo.Cache.server_process(cache, "alice")
     Todo.Server.add_entry(alice, %{date: ~D[2018-12-19], title: "Dentist"})
-
-    assert [%{date: ~D[2018-12-19], title: "Dentist"}] =
-             Todo.Server.entries(alice, ~D[2018-12-19])
-
-    GenServer.stop(cache)
+    entries = Todo.Server.entries(alice, ~D[2018-12-19])
+    assert [%{date: ~D[2018-12-19], title: "Dentist"}] = entries
   end
 end
